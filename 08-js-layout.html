@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script 
+        type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js">
+    </script>
+    <script>
+        $(function () {
+            $("head").load("08-head.html");
+            $("#header").load("08-header.html");
+            $("#footer").load("08-footer.html");
+        });
+    </script>
+    <script>
+        let row 
+        let cell
+        let array_fname = []
+        let array_phone = []
+        let array_email = []
+
+        if (localStorage.getItem('fname') != null && localStorage.getItem('phone') != null && localStorage.getItem('email') != null) {
+          array_fname = JSON.parse(localStorage.getItem('fname'))
+          array_phone = JSON.parse(localStorage.getItem('phone'))
+          array_email = JSON.parse(localStorage.getItem('email'))
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>08 JS Layout By Surapong</title>
+</head>
+<body onload="load_data()">
+    <section class="hero is-success is-fullheight">
+        <!-- Hero head: will stick at the top -->
+        <section class="section p-0" style="height: 200px; overflow:hidden; position: relative;">
+            <img src="https://cdn.pixabay.com/photo/2020/05/31/04/30/abstract-5241233_1280.jpg"
+            style="height: 100%; width: 100%; object-fit: cover; z-index: 1;position: absolute;">
+            <div class="content p-5" style="z-index: 2;position: relative;">
+            <h1 class="title">Section</h1>
+            <h2 class="subtitle">
+              A simple container to divide your page into <strong>sections</strong>, like the one you're currently reading.
+            </h2>
+            </div>
+        </section>
+        <div id="header"></div>
+      
+        <!-- Hero content: will be in the middle -->
+        <div class="hero-body has-background-success-light is-align-items-start">
+            <div class="columns is-centered mx-auto ">
+                <div class="column">
+                    <div class="card m-3">
+                        <div class="card-content has-background-success">
+                            <div class="content">
+                                <button class="button is-info" onclick="insert_data()">Insert Data</button>
+                                <table id="tb1" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>FName</th>
+                                            <th>Phone</th>
+                                            <th>Email</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                   
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Hero footer: will stick at the bottom -->
+        <div id="footer"></div>
+      </section>
+
+      <script>
+        let tb1 = document.getElementById('tb1').getElementsByTagName('tbody')[0]
+        function load_data() {
+            for(let i = 0 ; i < array_fname.length ; i++){
+            row = tb1.insertRow()
+            cell = row.insertCell()
+            cell.innerHTML = array_fname[i]
+
+            cell = row.insertCell()
+            cell.innerHTML = array_phone[i]
+
+            cell = row.insertCell()
+            cell.innerHTML = array_email[i]
+
+            cell = row.insertCell()
+            cell.innerHTML = '<button class="button is-warning is-outlined">Edit</button>'
+
+            cell = row.insertCell()
+            cell.innerHTML = '<button class="button is-danger is-outlined">DELETE</button>'
+        }
+        }
+
+        function insert_data() {
+            row = tb1.insertRow()
+            cell = row.insertCell()
+            cell.innerHTML = '<input class="input" type="text" placeholder="Input Full-name" id="fname">'
+
+            cell = row.insertCell()
+            cell.innerHTML = '<input class="input" type="text" placeholder="Input Phone Number" id="phone">'
+
+            cell = row.insertCell()
+            cell.innerHTML = '<input class="input" type="text" placeholder="Input E-mail" id="email">'
+
+            cell = row.insertCell()
+            cell.innerHTML = '<button class="button is-success is-outlined" onclick="save_data()">Save</button>'
+
+            cell = row.insertCell()
+            cell.innerHTML = '<button class="button is-info is-outlined" onclick="cancel_insert()">Cancel</button>'
+        }
+
+        function cancel_insert() {
+            row = tb1.deleteRow(tb1.rows.length - 1)
+        }
+
+        function save_data() {
+            if (document.getElementById('fname').value != '' && document.getElementById('phone').value != '' && document.getElementById('email').value != '') {
+
+            array_fname.push(document.getElementById('fname').value)
+            array_phone.push(document.getElementById('phone').value)
+            array_email.push(document.getElementById('email').value)
+
+            localStorage.setItem('fname', JSON.stringify(array_fname))
+            localStorage.setItem('phone', JSON.stringify(array_phone))
+            localStorage.setItem('email', JSON.stringify(array_email))
+
+            document.getElementById('fname').value = ''
+            document.getElementById('phone').value = ''
+            document.getElementById('email').value = ''
+            
+            tb1.innerHTML = ""
+
+            load_data()
+            }else{
+            window.alert('Please enter all data!!')
+            }
+
+            
+        }
+      </script>
+
+</body>
+</html>
